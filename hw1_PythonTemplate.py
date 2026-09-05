@@ -46,12 +46,13 @@ G = [
     [ -1, -1,  3,  2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0]  # S
 ]
 
+# Breadth first search: FIFO queue
 def BFS(start: str) -> list:
     # START: Your code here
     return []
     # END: Your code here
 
-
+# Depth first search: LIFO / Stack
 def DFS(start: str) -> list:
     # START: Your code here
     return []
