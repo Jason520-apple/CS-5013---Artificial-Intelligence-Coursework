@@ -20,12 +20,15 @@
 # -----------------------------
 
 # Step 1: store the graph of n nodes using an n-by-n adjacency matrix G, whose element
-# G(i, j) stores the weight between node i and node j.
+# G(i, j) stores the weight between node i and node j. 2 dimensional list
 
 # based off figure 2, expanded to include i j k l m n p q
 # -1 means that there is NOT a connection between the two nodes
 
-G = [
+from collections import deque
+
+
+adjacency_matrix = [
     #  A   B   C   D   E   F   G   H   I   J   K   L   M   N   P   Q   S
     [  0,  4, -1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1], # A
     [  4,  0,  2, -1, -1,  2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1], # B
@@ -46,10 +49,63 @@ G = [
     [ -1, -1,  3,  2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0]  # S
 ]
 
+# for accessing each row in adj matrix
+nodes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'S']
+
 # Breadth first search: FIFO queue
 def BFS(start: str) -> list:
     # START: Your code here
-    return []
+    
+    # need to output serarch sequence, sequence
+    # of nodes being visited by your search algorithm
+    
+    # have two queues, visited and frontier
+    # return visisted queue at the end
+    # the BFS will start at arbitrary starting node but terminate at 'G'
+    
+    visited = [] # add the 
+    frontierQueue = deque() #start with the given parameter
+    frontierQueue.append(start)
+    
+    # idea: 'str' is our starting node, take its whole row, and look for entries that are != -1, > 0
+    # then those nodes will be added to the frontier queue
+    # base on alphabetical order, then 
+    # whatever node is popped from frontier will add it's adjacent nodes to frontier, then move to visited
+    
+    while frontierQueue:
+    
+        # iterate through the row, if > 0, then add to frontier 
+        current = frontierQueue.popleft()
+        visited.append(current)
+        
+        
+        
+        # current is a string, get its equivalent index (ex: A -> 0, C -> 2)
+        rowIndex = nodes.index(current)
+        
+        # will be incremented and used to track node index
+        counter = 0
+        
+        # loop through the row in adjacency matrix for values > 0, if so get there string and add to frontierQueue
+        for entry in adjacency_matrix[rowIndex]:
+            
+            currentNode = nodes[counter]
+            
+            if (entry > 0 and currentNode not in visited and currentNode not in frontierQueue):
+                frontierQueue.append(currentNode)
+                
+                # terminate at G if it is found inside of row
+                if currentNode == 'G':
+                    visited.append(currentNode)
+                    print(visited)
+
+                    return visited
+                
+            counter += 1 #increment as we iterate to check next node/letter
+        
+    print(visited)
+    return visited
+
     # END: Your code here
 
 # Depth first search: LIFO / Stack
