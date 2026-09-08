@@ -26,6 +26,7 @@
 # -1 means that there is NOT a connection between the two nodes
 
 from collections import deque
+import heapq
 
 
 adjacency_matrix = [
@@ -51,6 +52,14 @@ adjacency_matrix = [
 
 # for accessing each row in adj matrix
 nodes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'S']
+
+# for use with GBFS
+h_values = {
+    'A': 10, 'B': 9, 'C': 16, 'D': 21, 
+    'E': 13, 'F': 9, 'G': 0, 'H': 12, 'I': 9, 
+    'J': 5, 'K': 8, 'L': 18, 'M': 3, 'N': 4, 
+    'P': 6, 'Q': 9, 'S': 17
+}
 
 # Breadth first search: FIFO queue
 def BFS(start: str) -> list:
@@ -78,8 +87,6 @@ def BFS(start: str) -> list:
         current = frontierQueue.popleft()
         visited.append(current)
         
-        
-        
         # current is a string, get its equivalent index (ex: A -> 0, C -> 2)
         rowIndex = nodes.index(current)
         
@@ -101,7 +108,7 @@ def BFS(start: str) -> list:
 
                     return visited
                 
-            counter += 1 #increment as we iterate to check next node/letter
+            counter += 1 #increment as we iterate to track for next node's index in the matrix
         
     print(visited)
     return visited
@@ -114,10 +121,52 @@ def DFS(start: str) -> list:
     return []
     # END: Your code here
 
-
+# Greedy Best first search: priority queue
 def GBFS(start: str) -> list:
     # START: Your code here
-    return []
+    
+    visited = [] # add the 
+    frontierQueue = [] #start with the given parameter
+    heapq.heappush(frontierQueue, (0, start)) #starting node is A and = 0
+    
+    while frontierQueue:
+        # serve smallest element in frontier priority queue
+        current = heapq.heappop(frontierQueue)[1] # want to pop to get the string of the node, 2nd part of tuple (ex: 'A')
+
+        visited.append(current)
+        
+        # current is a string, get its equivalent index (ex: A -> 0, C -> 2)
+        rowIndex = nodes.index(current)
+        
+        # will be incremented and used to track node index
+        counter = 0
+        
+        # loop through the row in adjacency matrix for values > 0, if so get there string and add to frontierQueue
+        for entry in adjacency_matrix[rowIndex]:
+            
+            currentNode = nodes[counter] #will be used in calclating priorityValue
+            # priorityValue is the current node's path + h(n)
+            # ex: b's is 4 + 9, f is 2 + 9, we are going for lowest since greedy
+        
+            if (entry > 0 and currentNode not in visited and currentNode not in frontierQueue):
+                
+                priorityValue = entry + h_values[currentNode] # priorityvalue = path + h_values cost
+                print(priorityValue)
+                
+                heapq.heappush(frontierQueue, (priorityValue, currentNode))
+                
+                # terminate at G if it is found inside of row
+                if currentNode == 'G':
+                    visited.append(currentNode)
+                    print(visited)
+                    return visited
+                
+            counter += 1 #increment as we iterate to track for next node's index in the matrix
+        
+    print(visited)
+    return visited
+    # the higher/max value from the current node's neighbor will be selected as next node
+    
     # END: Your code here
 
 
