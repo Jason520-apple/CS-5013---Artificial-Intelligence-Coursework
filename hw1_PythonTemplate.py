@@ -25,10 +25,52 @@ def BFS(start: str) -> list:
     return []
     # END: Your code here
 
-
+# Depth first search: LIFO / Stack
 def DFS(start: str) -> list:
     # START: Your code here
-    return []
+
+    visited = []
+    stack = [start]  # LIFO stack, start with the given parameter
+
+    while stack:
+        current = stack.pop()
+
+        # in case a node got pushed onto the stack more than once before
+        # being expanded, skip it if it's already been visited
+        if current in visited:
+            continue
+
+        visited.append(current)
+
+        rowIndex = nodes.index(current)
+
+        # collect the valid, not-yet-visited neighbors (in matrix/nodes order)
+        neighbors = []
+        counter = 0
+        for entry in adjacency_matrix[rowIndex]:
+            currentNode = nodes[counter]
+
+            if entry > 0 and currentNode not in visited:
+                # terminate at G as soon as it's discovered, same as BFS/GBFS
+                if currentNode == 'G':
+                    visited.append(currentNode)
+                    print(visited)
+                    return visited
+
+                neighbors.append(currentNode)
+
+            counter += 1
+
+        # push neighbors in reverse alphabetical order so that, since this
+        # is a stack, the alphabetically-first neighbor ends up on top and
+        # gets expanded next
+        neighbors.sort(reverse=True)
+        for n in neighbors:
+            stack.append(n)
+
+    print(visited)
+    return visited
+
     # END: Your code here
 
 
