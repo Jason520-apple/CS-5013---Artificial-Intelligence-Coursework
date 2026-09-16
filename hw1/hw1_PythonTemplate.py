@@ -187,12 +187,12 @@ def GBFS(start: str) -> list:
         for entry in adjacency_matrix[rowIndex]:
             
             currentNode = nodes[counter] #will be used in calclating priorityValue
-            # priorityValue is the current node's path + h(n)
+            # priorityValue for GBFS is only heurisitc (not path cost)
             # ex: b's is 4 + 9, f is 2 + 9, we are going for lowest since greedy
         
-            if (entry > 0 and currentNode not in visited and currentNode not in frontierQueue):
+            if (entry > 0 and currentNode not in visited):
                 
-                priorityValue = entry + h_values[currentNode] # priorityvalue = path + h_values cost
+                priorityValue = h_values[currentNode] # priorityvalue = only heuristic information
                 print(priorityValue)
                 
                 heapq.heappush(frontierQueue, (priorityValue, currentNode))
