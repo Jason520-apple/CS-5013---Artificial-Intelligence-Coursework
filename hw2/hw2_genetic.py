@@ -40,6 +40,17 @@ y = df['CreditApprove'].values
 # be passed into this function, then the one with the lowest value will be moved to
 # if the lowest neighbor is higher than current error then we will end loop there
 
+def errorFunction(w, X, y):
+    # f(x) is the dot product of the w vector (ex: w = [1, 1, −1, −1, 1, −1]
+    # along with the x which is each attribute, then added together
+
+    predictions = np.dot(X, w) #f(x)
+
+    # subtract y from this which is the application result / credit approve
+    squared_errors = (predictions - y)**2
+    error = np.mean(squared_errors)
+
+    return error #this function will be called during hill climbing
 
 # 3) genetic algorithm 
 
