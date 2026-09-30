@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 # 1) parse the csv and encode to 1s and 0s
 
-df = pd.read_csv('hw2/CreditCard.csv') #now in pandas dataframe object to manipulate
+df = pd.read_csv('CreditCard.csv') #now in pandas dataframe object to manipulate
 
 # drop any rows with missing data (NaNs) to prevent math errors
 df = df.dropna()
