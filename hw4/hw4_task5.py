@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 # import necessary library 
 # if you need more libraries, just import them
 from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.metrics import roc_auc_score
 # ......
 # --- end of task --- #
 
@@ -40,16 +42,14 @@ for per in num_train_per:
     # --- Your Task --- #
     # Implement a baseline method that standardly trains 
     # the model using sample_train and label_train
-    # ......
-    # ......
-    # ......
+    model.fit(sample_train, label_train)
     
     # evaluate model testing accuracy and stores it in "acc_base"
-    # ......
+    acc_base = np.mean(model.predict(sample_test) == label_test)
     acc_base_per.append(acc_base)
     
     # evaluate model testing AUC score and stores it in "auc_base"
-    # ......
+    auc_base = roc_auc_score(label_test, model.predict_proba(sample_test)[:,1])
     auc_base_per.append(auc_base)
     # --- end of task --- #
     
@@ -58,14 +58,19 @@ for per in num_train_per:
     # Now, implement your method 
     # Aim to improve AUC score of baseline 
     # while maintaining accuracy as much as possible 
-    # ......
-    # ......
-    # ......
+
+    W = 5
+    C_yours = 0.1
+    poly = PolynomialFeatures(2, include_bias=False)
+    model_y = LogisticRegression(C=C_yours, class_weight={0: 1, 1: W}, max_iter=10000)
+    model_y.fit(poly.fit_transform(sample_train), label_train)
+    score_test = model_y.decision_function(poly.transform(sample_test))
+ 
     # evaluate model testing accuracy and stores it in "acc_yours"
-    # ......
+    acc_yours = np.mean((score_test > np.log(W)).astype(float) == label_test)
     acc_yours_per.append(acc_yours)
     # evaluate model testing AUC score and stores it in "auc_yours"
-    # ......
+    auc_yours = roc_auc_score(label_test, score_test)
     auc_yours_per.append(auc_yours)
     # --- end of task --- #
     
@@ -84,6 +89,4 @@ plt.plot(num_train_per,auc_yours_per, label='Your AUC Score')
 plt.xlabel('Percentage of Training Data')
 plt.ylabel('Classification AUC Score')
 plt.legend()
-    
-
-
+plt.show()
