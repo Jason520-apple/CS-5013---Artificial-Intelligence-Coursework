@@ -24,7 +24,7 @@ label_test = data[n-num_test:,-1]
 # now, pick the percentage of data used for training 
 # remember we should be able to observe overfitting with this pick 
 # note: maximum percentage is 0.75 
-per = 0.75 #kfold benefits from as much training data as possible
+per = 0.12 #overfitting occurs when starved of data
 num_train = int(n*per)
 sample_train = data[0:num_train,0:-1]
 label_train = data[0:num_train,-1]
