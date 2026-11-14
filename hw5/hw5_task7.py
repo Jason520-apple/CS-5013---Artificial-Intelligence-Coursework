@@ -55,9 +55,16 @@ print(er_gap)
 # --- Your Task --- #
 # now, implement whatever method you choose 
 # aim to reduce the gap between two errors 
-# ......
-# ......
-# ......
+
+# Method - Pre-processing via Oversampling (Resampling):
+# Duplicate the disadvantaged group (male students, column 0 == 0) in the 
+# training set so the model gives more weight to male samples during training.
+idx_train_male = np.where(sample_train[:,0]==0)[0]
+sample_train_fair = np.vstack((sample_train, sample_train[idx_train_male], sample_train[idx_train_male]))
+label_train_fair = np.concatenate((label_train, label_train[idx_train_male], label_train[idx_train_male]))
+
+model.fit(sample_train_fair, label_train_fair)
+
 # whatever method you have, store your model prediction 
 # on testing set in "label_pred". Then run the following code
 label_pred = model.predict(sample_test)
