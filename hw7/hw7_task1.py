@@ -1,3 +1,5 @@
+# Task 1. Evaluate the Impact of Layer Size on Classification Accuracy
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.neural_network import MLPClassifier
