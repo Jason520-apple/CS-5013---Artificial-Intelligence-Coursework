@@ -20,7 +20,7 @@ label_test = data[n-num_test:,-1]
 # ----------------------- #
 # --- Hyper-Parameter --- #
 # ----------------------- #
-k_values = [0,0,0,0,0]
+k_values = [1, 4, 16, 64, 256] # want to be able to observe under and overfitting
 # m_values = [0,0,0,0,0]
 
 er_train_k = []
@@ -28,16 +28,23 @@ er_test_k = []
 for k in k_values: 
     
     # train a MLP classification model 
-    # ......        
-    # ......
-    # ......
+    model = MLPClassifier (
+        hidden_layer_sizes=(k,) * 5, #5 layers, vary number of neurons per layer k
+        max_iter = 2000, 
+        random_state = 42 #fixed seed
+    )
+
+    model.fit(sample_train, label_train)
     
     # evaluate training error and testing error 
-    # ......
-    # ......
-    # ......
-    # er_train = ...
-    # er_test = ...
+    
+    # need to do 1 - accuracy_score
+
+    pred_train = model.predict(sample_train)
+    pred_test = model.predict(sample_test)
+
+    er_train = 1 - accuracy_score(label_train, pred_train)
+    er_test = 1 - accuracy_score(label_test, pred_test)
     er_train_k.append(er_train)
     er_test_k.append(er_test)
    
@@ -47,5 +54,6 @@ plt.plot(k_values,er_test_k, label='Testing Error')
 plt.xlabel('k value') # need to change it to "m" value for figure 2
 plt.ylabel('Classification Error')
 plt.legend()
-
-
+plt.xscale('log') #to spread out points for better visibility
+plt.xticks(k_values, k_values)
+plt.show()
